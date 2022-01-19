@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hongxing.goods_system.mapper.GoodsMapper">
+
+    <resultMap id="goodsResultMap" type="Goods">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
+        <result property="unit" column="unit" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="VARCHAR"/>
+        <result property="orig" column="orig" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectGoods" resultType="Goods">
+        select * from goodsdata where id=#{id} and flag!=1;
+    </select>
+
+    <select id="selectGoodsList" resultType="Goods">
+        select * from goodsdata where flag=0 ;
+    </select>
+
+    <!--  添加商品  -->
+    <insert id="addGoods" parameterType="Goods">
+        insert into goodsdata(name,barcode,unit,price,orig)
+        values (#{goods.name},#{goods.barcode},#{goods.unit},#{goods.price},#{goods.orig})
+    </insert>
+
+    <!--  假删除  -->
+    <update id="delGoods" parameterType="integer">
+        update goodsdata set flag=1 where id=#{id};
+    </update>
+
+    <!--更新-->
+    <update id="updateGoods" parameterType="Goods">
+        update hxshop.goodsdata
+        <set>
+            <if test="goods.name!=null">
+                name = #{goods.name},
+            </if>
+            <if test="goods.barcode != null">
+                barcode=#{goods.barcode},
+            </if>
+            <if test="goods.unit != null">
+                unit=#{goods.unit},
+            </if>
+            <if test="goods.price != null">
+                price=#{goods.price},
+            </if>
+            <if test="goods.orig != null">
+                orig=#{goods.orig}
+            </if>
+        </set>
+        where id=#{goods.id};
+    </update>
+</mapper>
