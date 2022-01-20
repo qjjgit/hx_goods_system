@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hongxing.goods_system.mapper.GoodsMapper">
 
+    <cache type="com.hongxing.goods_system.conf.MybatisRedisCache"/>
+
     <resultMap id="goodsResultMap" type="Goods">
         <result property="id" column="id" jdbcType="VARCHAR"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
@@ -11,7 +13,7 @@
         <result property="orig" column="orig" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="selectGoods" resultType="Goods">
+    <select id="selectGoods" resultType="Goods" >
         select * from goodsdata where id=#{id} and flag!=1;
     </select>
 

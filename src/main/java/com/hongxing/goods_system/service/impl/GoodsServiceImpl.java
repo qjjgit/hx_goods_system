@@ -16,13 +16,13 @@ public class GoodsServiceImpl implements GoodsService {
     public GoodsServiceImpl(GoodsMapper goodsMapper) { this.goodsMapper = goodsMapper; }
 
     @Override
-    @Cacheable(value = "goodsList")
+//    @Cacheable(value = "goodsList")
     public List<Goods> selectGoodsList() {
         return goodsMapper.selectGoodsList();
     }
 
     @Override
-    @Cacheable(value = "goods",key = "#p0")
+//    @Cacheable(value = "goods",key = "#p0")
     public Goods getOne(Integer id){
         return goodsMapper.selectGoods(id);
     }

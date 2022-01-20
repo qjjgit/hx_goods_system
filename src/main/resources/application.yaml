@@ -19,6 +19,7 @@ mybatis-plus:
   type-aliases-package: com.hongxing.goods_system.bean
   configuration:
     cache-enabled: true
+    map-underscore-to-camel-case: true
 
 logging:
   level:
