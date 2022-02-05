@@ -33,6 +33,7 @@ public class MybatisRedisCache implements Cache {
 
     @Override
     public void putObject(Object key, Object value) {
+        // TODO: 2022/1/26 判空 null值加上过期时间
         getRedisTemplate().boundHashOps(getId()).put(key, value);
         log.info("[结果放入到缓存中: " + key + "=" + value+" ]");
 

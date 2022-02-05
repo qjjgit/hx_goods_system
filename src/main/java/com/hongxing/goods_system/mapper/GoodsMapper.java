@@ -1,8 +1,7 @@
 package com.hongxing.goods_system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hongxing.goods_system.bean.Goods;
-import org.apache.ibatis.annotations.Mapper;
+import com.hongxing.entity.Goods;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
@@ -19,11 +18,13 @@ public interface GoodsMapper extends BaseMapper<Goods> {
 
     /**
      * 假删除 set: flag = 1
-     * @param gid 商品id
+     * @param goodsId 商品id
      * @return 返回 被删除的商品的名称
      */
-    int delGoods(Integer gid);
+    int delGoods(@Param(value = "gid") Integer goodsId);
 
 
     int updateGoods(@Param(value = "goods") Goods goods);
+
+    Goods selectByBarcode(String barcode);
 }

@@ -1,12 +1,17 @@
 package com.hongxing.goods_system.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.hongxing.goods_system.bean.User;
+import com.hongxing.constant.IdentityType;
+import com.hongxing.entity.UserAuthDO;
+import com.hongxing.entity.UserBaseInfo;
+import com.hongxing.exception.UserAuthException;
+import com.hongxing.goods_system.mapper.UserAuthMapper;
 import com.hongxing.goods_system.mapper.UserMapper;
 import com.hongxing.goods_system.service.UserService;
+import com.hongxing.security.PBKDF2;
 import com.hongxing.utils.ValidatorUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
 *
@@ -14,38 +19,31 @@ import org.springframework.stereotype.Service;
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
-    final UserMapper userMapper;
+    @Resource
+    private UserMapper userMapper;
 
-    public UserServiceImpl(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
+    @Resource
+    private UserAuthMapper userAuthMapper;
 
     @Override
-    public User login(String text, String pwd) throws Exception {
+    public UserBaseInfo login(String text, String credential) throws UserAuthException {
         if (ValidatorUtil.isPhoneNumber(text)) {
-            return authByPhoneAndPwd(text, pwd);
+            return authWithPwd(IdentityType.PHONE,text,credential);
         }
         if (ValidatorUtil.isUsername(text)){
-            return authByUsernameAndPwd(text, pwd);
+            return authWithPwd(IdentityType.USERNAME,text,credential);
         }
-        throw new Exception("请输入手机号或用户名");
+        throw new UserAuthException("请输入手机号或用户名");
     }
 
-    private User authByPhoneAndPwd(String phone, String pwd) throws Exception {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uphone",phone);// TODO: 2022/1/20 修改表结构
-        queryWrapper.eq("upwd",pwd);
-        User user = userMapper.selectOne(queryWrapper);
-        if (user == null) throw new Exception("密码错误");
-        return user;
+    private UserBaseInfo authWithPwd(IdentityType identityType, String identifier, String password) throws UserAuthException {
+        UserAuthDO userAuthDO = userAuthMapper.loginAuth(identityType.value(), identifier);
+        if (userAuthDO == null) throw new UserAuthException("账号不存在");
+        System.out.println("userAuthDO = " + userAuthDO);
+        if (!PBKDF2.verify(password,userAuthDO.getSalt(),userAuthDO.getCredential())) {
+            throw new UserAuthException("账号或密码错误");
+        }
+        return userMapper.selectById(userAuthDO.getUserId());
     }
 
-    private User authByUsernameAndPwd(String username, String pwd) throws Exception {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("uname",username);
-        queryWrapper.eq("upwd",pwd);
-        User user = userMapper.selectOne(queryWrapper);
-        if (user == null) throw new Exception("密码错误");
-        return user;
-    }
 }

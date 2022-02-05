@@ -14,13 +14,14 @@
     <name>goods_system</name>
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
 
         <dependency>
             <groupId>com.hongxing</groupId>
-            <artifactId>utils</artifactId>
+            <artifactId>hx-core</artifactId>
             <version>1.0</version>
         </dependency>
 

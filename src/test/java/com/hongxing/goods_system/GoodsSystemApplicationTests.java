@@ -9,6 +9,7 @@ class GoodsSystemApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

@@ -1,7 +1,7 @@
 package com.hongxing.goods_system.service;
 
-import com.hongxing.goods_system.bean.User;
+import com.hongxing.entity.UserBaseInfo;
 
 public interface UserService {
-    User login(String text,String pwd) throws Exception;
+    UserBaseInfo login(String text, String credential) throws Exception;
 }

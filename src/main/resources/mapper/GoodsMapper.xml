@@ -5,12 +5,12 @@
     <cache type="com.hongxing.goods_system.conf.MybatisRedisCache"/>
 
     <resultMap id="goodsResultMap" type="Goods">
-        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="barcode" column="barcode" jdbcType="VARCHAR"/>
         <result property="unit" column="unit" jdbcType="VARCHAR"/>
-        <result property="price" column="price" jdbcType="VARCHAR"/>
-        <result property="orig" column="orig" jdbcType="VARCHAR"/>
+        <result property="price" column="price" jdbcType="FLOAT"/>
+        <result property="orig" column="orig" jdbcType="FLOAT"/>
     </resultMap>
 
     <select id="selectGoods" resultType="Goods" >
@@ -21,6 +21,11 @@
         select * from goodsdata where flag=0 ;
     </select>
 
+    <select id="selectByBarcode" resultType="com.hongxing.entity.Goods">
+        select * from goodsdata
+        where barcode = #{barcode} and flag=0;
+    </select>
+
     <!--  添加商品  -->
     <insert id="addGoods" parameterType="Goods">
         insert into goodsdata(name,barcode,unit,price,orig)
@@ -29,7 +34,7 @@
 
     <!--  假删除  -->
     <update id="delGoods" parameterType="integer">
-        update goodsdata set flag=1 where id=#{id};
+        update goodsdata set flag=1 where id=#{gid};
     </update>
 
     <!--更新-->
